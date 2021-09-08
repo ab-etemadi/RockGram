@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsNumber, IsString } from 'class-validator';
+import {IsString } from 'class-validator';
 
 export class UpdateMessageDto{
   @IsString()
