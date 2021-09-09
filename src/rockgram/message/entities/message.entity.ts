@@ -1,6 +1,7 @@
+/* eslint-disable prettier/prettier */
+import { Chat } from "src/rockgram/chat/entities/chat.entity";
+import { User } from "src/rockgram/user/entities/user.entity";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Chat } from "./chat.entity";
-import { User } from "./user.entity";
 
 @Entity()
 export class Message{
