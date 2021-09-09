@@ -33,7 +33,7 @@ export class User{
 
     @JoinTable()
     @ManyToMany(type => Chat, (chat) => chat.users)
-    chats: string[];
+    chats: Chat[];
 
 
 

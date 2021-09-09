@@ -11,7 +11,7 @@ export class Message{
     text: string;
 
     @Column()
-    date: string;
+    date: Date;
 
     @ManyToOne(() => User, user => user.messages)
     // @JoinColumn({name: 'user_id'})

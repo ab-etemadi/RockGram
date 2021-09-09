@@ -4,8 +4,8 @@ import { UpdateMessageDto } from './dto/update-message.dto';
 
 @Injectable()
 export class ChatService {
-  getMessages(chatId: number, senderId: number) {
-    return `load all messages with this chat id: ${chatId}, messages of sender ${senderId} apear in right side of chat`;
+  getMessages(chatId: number) {
+    return `load all messages with this chat id: ${chatId}, messages of sender  apear in right side of chat`;
   }
 
   createMessage(message: CreateMessageDto) {
@@ -16,7 +16,7 @@ export class ChatService {
     return 'return the updated message text';
   }
 
-  deleteMessage(id: number) {
+  deleteMessage(id: number,userId:number) {
     return 'message deleted';
   }
 }
