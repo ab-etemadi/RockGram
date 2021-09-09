@@ -1,6 +1,7 @@
-import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Message } from "./message.entity";
-import { User } from "./user.entity";
+/* eslint-disable prettier/prettier */
+import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Message } from './message.entity';
+import { User } from './user.entity';
 
 @Entity()
 export class Chat{

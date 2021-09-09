@@ -1,4 +1,4 @@
-
+/* eslint-disable prettier/prettier */
 import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Chat } from "./chat.entity";
 import { Message } from "./message.entity";
