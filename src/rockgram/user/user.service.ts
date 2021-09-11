@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -18,7 +19,7 @@ export class UserService {
     }
 
     updateUser(id: string, updateUserDto: UpdateUserDto){
-        return `User #(${id}) Updated!`
+        return `User #(${id}) Updated! `
     }
 
     deleteUser(id: string){

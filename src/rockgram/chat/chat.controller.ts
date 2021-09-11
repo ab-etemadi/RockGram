@@ -8,8 +8,8 @@ export class ChatController {
         private readonly chatService: ChatService
     ){}
 
-    @Get('/:userId')
-    loadAllChats(@Param('userId') userId: number){
+    @Get('/:userId/:type')
+    loadAllChats(@Param('userId') userId: number, @Param('type') type: string){
         return this.chatService.getAllChats(userId);
     }
 
