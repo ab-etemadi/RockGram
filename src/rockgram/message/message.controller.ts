@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 
 import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 
@@ -23,7 +24,7 @@ export class MessageController {
         return this.messageService.createMessage(message);
     }
 
-    @Patch()
+    @Patch(':id')
     updateMessage(@Param('id') id: number, @Body() updatedMessage: UpdateMessageDto){
         return this.messageService.updateMessage(id, updatedMessage);
     } 

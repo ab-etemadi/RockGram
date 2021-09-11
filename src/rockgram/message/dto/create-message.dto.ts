@@ -12,3 +12,5 @@ export class CreateMessageDto {
     @IsNumber()
     readonly chatId: number;
 }
+
+
