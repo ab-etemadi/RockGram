@@ -13,14 +13,9 @@ export class ChatController {
         return this.chatService.getAllChats(userId);
     }
 
-    @Post('/:chatType')
-    createGroup(@Body() groupChatDetail: CreateChatDto, @Param('chatType') chatType: string){
-        return this.chatService.createGroupChat(groupChatDetail);
-    }
-
     @Post()
     createChat(@Body() personalChatDetail: CreateChatDto,){
-        return this.chatService.createPersonalChat(personalChatDetail);
+        return this.chatService.createPersonalChat(personalChatDetail,this.getUserId());
     }
 
     @Delete(':chatId')
