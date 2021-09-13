@@ -11,7 +11,7 @@ import { CommonModule } from './rockgram/common/common.module';
     ConfigModule.forRoot(),
     CommonModule,
     TypeOrmModule.forRoot({
-      type: 'postgres',
+      type: 'mysql',
       host: process.env.DATABASE_HOST,
       port: +process.env.DATABASE_PORT,
       username: process.env.DATABASE_USER,
@@ -20,6 +20,7 @@ import { CommonModule } from './rockgram/common/common.module';
       autoLoadEntities: true,
       synchronize: true,
     })
+ 
   ],
   controllers: [AppController],
   providers: [AppService],
