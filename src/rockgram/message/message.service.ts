@@ -1,22 +1,39 @@
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, Options } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
+import { Message } from './entities/message.entity';
 
 @Injectable()
 export class MessageService {
-  
+
+  constructor(
+    @InjectRepository(Message)
+    private readonly messageRepository: Repository<Message>,
+  ){}
   getMessages(chatId: number) {
-    return `load all messages with this chat id: ${chatId}.`;
+    return this.messageRepository.findOne(chatId);
   }
-  createMessage(message: CreateMessageDto) {
-    return 'return the message text';
-  }
-  updateMessage(id: number, message: UpdateMessageDto) {
-    return 'return the updated message text';
+  createMessage(message: CreateMessageDto, id: number) {
+    const msg = this.messageRepository.create(message);  
+    return this.messageRepository.save(msg);
   }
 
-  deleteMessage(id: number,userId:number) {
-    return `'message deleted ${userId}`;
+  async updateMessage(id: number, message: UpdateMessageDto) {
+    const msg = await this.messageRepository.preload({
+      id: id,
+      ...message
+    })
+    if(!message){
+      throw new NotFoundException('message not found with this id number');
+    }
+    return this.messageRepository.save(msg);
+  }
+
+  async deleteMessage(id: number, userId:number) {
+    const msg = await this.messageRepository.findOne(id);
+    return this.messageRepository.delete(msg);
   }
 }
