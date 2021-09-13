@@ -8,7 +8,7 @@ export class ChatService {
         return `returns all chats with this userId: ${userId}`;
     }
 
-    createPersonalChat(personalChatDetail: CreateChatDto,){
+    createPersonalChat(personalChatDetail: CreateChatDto, id: number){
         return `create a personal chat with this ${personalChatDetail.name}`;
     }
 
