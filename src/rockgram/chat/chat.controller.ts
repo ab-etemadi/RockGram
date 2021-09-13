@@ -14,7 +14,7 @@ export class ChatController {
     }
 
     @Post()
-    createChat(@Body() personalChatDetail: CreateChatDto,){
+    createChat(@Body() personalChatDetail: CreateChatDto, id: number){
         return this.chatService.createPersonalChat(personalChatDetail,this.getUserId());
     }
 
