@@ -20,12 +20,6 @@ export class Chat{
     })
     messages: Message[];
 
-
-
-
-    // @ManyToMany(type => User, user => user.chats)    
-    // users: User[];
-
     @OneToMany(() => UserChat, (userChat) => userChat.chat)
     public userChat: UserChat[];
 

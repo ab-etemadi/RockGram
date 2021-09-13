@@ -6,5 +6,10 @@ export class CreateChatDto{
   @IsString()
   readonly name: string;
   @IsString()
-  readonly type: string; 
+  readonly type: chatType; 
+}
+
+export enum chatType{
+  personal = "PERSONAL",
+  group = "GROUP"
 }
