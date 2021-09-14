@@ -1,22 +1,29 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
 import { ChatService } from './chat.service';
-import { CreateChatDto } from './dto/create-chat.dto';
+import { chatType, CreateChatDto } from './dto/create-chat.dto';
 @Controller('chat')
 export class ChatController {
     constructor(
         private readonly chatService: ChatService
     ){}
 
-    @Get('/:userId/:type')
-    loadAllChats(@Param('userId') userId: number, @Param('type') type: string){
-        return this.chatService.getAllChats(userId);
+    
+    @Get()
+    getAllChats(){
+        return this.chatService.getAllChats();
+    }
+
+    @Get(':type')
+    getAllChatsByType(@Param('type') type: string){
+        const user = this.getUserId();
+        return this.chatService.getAllChatsByType(user,type);
     }
 
     @Post()
     createChat(@Body() personalChatDetail: CreateChatDto){
         const userId =  this.getUserId();
-        return this.chatService.createPersonalChat(personalChatDetail, userId);
+        return this.chatService.createChat(personalChatDetail, userId);
     }
 
     @Delete(':chatId')

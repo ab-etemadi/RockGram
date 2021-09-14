@@ -1,29 +1,52 @@
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
+    constructor(
+        @InjectRepository(User)
+        private readonly userRepository: Repository<User>,
+    ){}
+
 
     findAll(){
-        return `All User Well return soon!`;
+        return this.userRepository.find({ relations: ["userChat"] });
     }
 
-    findOneUser(email: string){
-        return `Return User with #(${email})`;
+    async findOneUser(id: string){
+        const user = await this.userRepository.findOne(id);
+        if (!user) {
+            throw new NotFoundException(`User #(${id}) not found!`)
+        }
+        return user;
+
     }
 
     createUser(createUserDto: CreateUserDto){
-        return `User Created!`;
+        const user = this.userRepository.create(createUserDto);
+        return this.userRepository.save(user);
     }
 
-    updateUser(id: string, updateUserDto: UpdateUserDto){
-        return `User #(${id}) Updated! `
+    async updateUser(id: string, updateUserDto: UpdateUserDto){
+        const user = await this.userRepository.preload({
+            id: +id,
+            ...updateUserDto,
+        });
+        if (!user) {
+            throw new NotFoundException(`User #(${id}) not found!`)
+        }
+        return this.userRepository.save(user);
+        
     }
 
-    deleteUser(id: string){
-        return `User #(${id}) deleted!`
+    async deleteUser(id: string){
+        const user = await this.findOneUser(id);
+        return this.userRepository.remove(user);
     }
 
 }

@@ -37,6 +37,10 @@ export class MessageController {
     }
 
     getUserId(){
+        return 2;
+    }
+
+    getChatId(){
         return 1;
     }
 }

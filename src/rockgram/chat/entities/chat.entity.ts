@@ -1,8 +1,7 @@
 /* eslint-disable prettier/prettier */
-import { UserChat } from 'src/rockgram/common/user-chat';
+import { UserChat } from "src/rockgram/user_chat/user-chat";
 import { Message } from 'src/rockgram/message/entities/message.entity';
-import { User } from 'src/rockgram/user/entities/user.entity';
-import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Chat{
@@ -20,16 +19,9 @@ export class Chat{
     })
     messages: Message[];
 
-
-
-
-    // @ManyToMany(type => User, user => user.chats)    
-    // users: User[];
-
-    @OneToMany(() => UserChat, (userChat) => userChat.chat)
+    @OneToMany(() => UserChat, (userChat) => userChat.chat, {
+        cascade: true
+    })
     public userChat: UserChat[];
-
-
-
 
 }
