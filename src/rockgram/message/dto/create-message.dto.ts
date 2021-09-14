@@ -1,12 +1,13 @@
 /* eslint-disable prettier/prettier */
 
-import { IsNumber, IsString } from 'class-validator';
+import {IsString, IsNumber } from 'class-validator';
+
 
 export class CreateMessageDto {
     @IsString()
     readonly text: string;
     @IsString()
-    readonly date: any;
+    readonly date: string;
     @IsNumber()
     readonly senderId: number;
     @IsNumber()

@@ -21,9 +21,7 @@ export class User{
     @OneToMany(() => Message, message => message.user, {
         cascade: true
     })
-    messages: Message[];
-
-
+    message: Message[];
 
     // @JoinTable()
     // @ManyToMany(type => Chat, (chat) => chat.users)
