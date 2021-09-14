@@ -15,7 +15,6 @@ export class Message{
     date: Date;
 
     @ManyToOne(() => User, user => user.messages)
-    // @JoinColumn({name: 'user_id'})
     user: User;
 
 

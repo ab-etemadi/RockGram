@@ -8,10 +8,16 @@ export class ChatController {
         private readonly chatService: ChatService
     ){}
 
+    
+    @Get()
+    getAllChats(){
+        return this.chatService.getAllChats();
+    }
+
     @Get(':type')
-    loadAllChats(@Query('type') type: chatType = chatType.personal){
+    getAllChatsByType(@Param('type') type: string){
         const user = this.getUserId();
-        return this.chatService.getAllChats(user,type);
+        return this.chatService.getAllChatsByType(user,type);
     }
 
     @Post()
@@ -27,7 +33,7 @@ export class ChatController {
     }
 
     getUserId() {
-        return 2;
+        return 1;
     }
 
 }

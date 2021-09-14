@@ -15,7 +15,7 @@ export class UserService {
 
 
     findAll(){
-        return this.userRepository.find();
+        return this.userRepository.find({ relations: ["userChat"] });
     }
 
     async findOneUser(id: string){
