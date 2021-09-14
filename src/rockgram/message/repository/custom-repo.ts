@@ -16,7 +16,6 @@ export class CustomRepository {
         const {text, date, senderId, chatId} = createMessageDto;
         const message = new Message();
         message.date = date;
-        message.text = text;
         await this.repo.save(message);
         return message;
     }
