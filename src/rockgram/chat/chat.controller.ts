@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
 import { ChatService } from './chat.service';
-import { chatType, CreateChatDto } from './dto/create-chat.dto';
+import {  CreateChatDto } from './dto/create-chat.dto';
 @Controller('chat')
 export class ChatController {
     constructor(
@@ -21,9 +21,10 @@ export class ChatController {
     }
 
     @Post()
-    createChat(@Body() personalChatDetail: CreateChatDto){
-        const userId =  this.getUserId();
-        return this.chatService.createChat(personalChatDetail, userId);
+    createChat(@Body() ChatDetail: CreateChatDto){
+        // const userId =  this.getUserId();
+        // const msgId = this.getUserMsg();
+        return this.chatService.createChat(ChatDetail);
     }
 
     @Delete(':chatId')
@@ -34,6 +35,9 @@ export class ChatController {
 
     getUserId() {
         return 1;
+    }
+    getUserMsg() {
+        return null;
     }
 
 }
