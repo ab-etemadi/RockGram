@@ -12,10 +12,16 @@ export class CustomRepository {
         @InjectRepository(Message)
         private readonly repo: Repository<Message>,
     ){}
-    public async createMesssage(createMessageDto: CreateMessageDto): Promise<Message>{
-        const {text, date, senderId, chatId} = createMessageDto;
+    public async createMesssage(createMessageDto: CreateMessageDto, userId: number, chatId: number ): Promise<Message>{
+        const {text, date,} = createMessageDto;
+        console.log(userId, chatId);
         const message = new Message();
         message.date = date;
+        message.text = text; 
+        message.user = userId;
+        message.chat = chatId;
+
+        await this.repo.create(message);
         await this.repo.save(message);
         return message;
     }

@@ -21,8 +21,9 @@ export class MessageController {
 
     @Post()
     async createMessage(@Body() message: CreateMessageDto){
-        const user = this.getUserId();
-        return await this.messageService.createMessage(message,user);
+        const userId = this.getUserId();
+        const chatId = this.getChatId();
+        return await this.messageService.createMessage(message,userId,chatId);
     }
 
     @Patch(':id')

@@ -8,10 +8,7 @@ export class CreateMessageDto {
     readonly text: string;
     @IsString()
     readonly date: string;
-    @IsNumber()
-    readonly userId: any;
-    @IsNumber()
-    readonly chatId: string;
+
 }
 
 

@@ -16,25 +16,16 @@ export class MessageService {
   constructor(
     @InjectRepository(Message)
     private readonly messageRepository: Repository<Message>,
-<<<<<<< HEAD
-    private readonly costumRepository: CustomRepository,
-=======
+    private readonly customRepository: CustomRepository,
    
->>>>>>> 46f3d59b7eef163a6664f157e7e97140f2d6f785
   ){}
   getMessages(chatId: number) {
     return this.messageRepository.findOne(chatId);
   }
-<<<<<<< HEAD
- async createMessage(message: CreateMessageDto, id: number) {
-    return await this.costumRepository.createMesssage(message);
-=======
 
 
-  async createMessage(message: CreateMessageDto) {
-    const msg = this.messageRepository.create(message);  
-    return this.messageRepository.save(msg);
->>>>>>> 46f3d59b7eef163a6664f157e7e97140f2d6f785
+  async createMessage(message: CreateMessageDto, userId: number, chatId: number) {
+    return await this.customRepository.createMesssage(message, userId, chatId)
   }
 
   async updateMessage(id: number, message: UpdateMessageDto) {
