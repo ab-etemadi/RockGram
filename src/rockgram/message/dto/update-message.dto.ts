@@ -3,5 +3,5 @@ import {IsString } from 'class-validator';
 
 export class UpdateMessageDto{
   @IsString()
-  readonly textOne: string;
+  readonly text: string;
 }

@@ -27,21 +27,21 @@ export class MessageController {
     }
 
     @Patch(':id')
-    updateMessage(@Param('id') id: number, @Body() updatedMessage: UpdateMessageDto){
-        return this.messageService.updateMessage(id, updatedMessage);
-    } 
+    updateMessage(@Param('id') messageId: number, @Body() updatedMessage: UpdateMessageDto){
+        return this.messageService.updateMessage(messageId, updatedMessage);
+    }
 
     @Delete(':id')
-    deleteMessage(@Param('id') id: number){
-        const userId = this.getUserId();
-        return this.messageService.deleteMessage(id,userId);
+    deleteMessage(@Param('id') id: number,){
+        console.log(`${id} controller`);
+        return this.messageService.deleteMessage(id, this.getUserId());
     }
 
     getUserId(){
-        return 2;
+        return 3;
     }
 
     getChatId(){
-        return 1;
+        return 2;
     }
 }

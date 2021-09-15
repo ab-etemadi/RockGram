@@ -7,10 +7,10 @@ import { ChatController } from './chat.controller';
 import { ChatService } from './chat.service';
 import { Chat } from './entities/chat.entity';
 import { UserChatModule } from '../user_chat/user_chat.module';
-
+import { ChatRepository } from './repository/chat-repo';
 @Module({
   imports: [TypeOrmModule.forFeature([Chat,UserChat]),UserChatModule],
+  providers: [ChatService, ChatRepository],
   controllers: [ChatController],
-  providers: [ChatService],
 })
 export class ChatModule {}

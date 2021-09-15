@@ -23,7 +23,7 @@ export class ChatController {
     @Post()
     createChat(@Body() personalChatDetail: CreateChatDto){
         const userId =  this.getUserId();
-        return this.chatService.createChat(personalChatDetail, userId);
+        return this.chatService.createChat(personalChatDetail, [userId,2],[1]);
     }
 
     @Delete(':chatId')

@@ -17,11 +17,11 @@ export class Chat{
     @OneToMany(() => Message, message => message.user, {
         cascade: true
     })
-    messages: Message[];
+    messages: any[];
 
     @OneToMany(() => UserChat, (userChat) => userChat.chat, {
         cascade: true
     })
-    public userChat: UserChat[];
+    public userChat: any[];
 
 }

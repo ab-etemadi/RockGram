@@ -20,7 +20,8 @@ export class MessageService {
    
   ){}
   getMessages(chatId: number) {
-    return this.messageRepository.findOne(chatId);
+    console.log(chatId);
+    return this.messageRepository.find({});
   }
 
 
@@ -29,19 +30,11 @@ export class MessageService {
   }
 
   async updateMessage(id: number, message: UpdateMessageDto) {
-    const msg = await this.messageRepository.preload({
-      id: id,
-      ...message
-    })
-    if(!message){
-      throw new NotFoundException('message not found with this id number');
-    }
-    return this.messageRepository.save(msg);
+   return this.customRepository.updateMessage(id, message);
   }
 
   async deleteMessage(id: number, userId:number) {
-    const msg = await this.messageRepository.findOne(id);
-    return this.messageRepository.delete(msg);
+    return this.customRepository.deleteMessage(id, userId);
   }
 
 }
