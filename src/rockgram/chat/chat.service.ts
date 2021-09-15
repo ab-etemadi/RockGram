@@ -6,6 +6,7 @@ import { UserChat } from "src/rockgram/user_chat/user-chat";
 import { UserService } from '../user/user.service';
 import { CreateChatDto } from './dto/create-chat.dto';
 import { Chat } from './entities/chat.entity';
+
 import { ChatRepository } from './repository/chatRepository';
 
 @Injectable()
@@ -23,6 +24,7 @@ export class ChatService {
             
         // }
     }
+
 
     async createChat(createChatDto: CreateChatDto){
         return await this.chatRepo.createChat(createChatDto, [{id:undefined,userId:1,chatId:1 , role:"admin"}] )

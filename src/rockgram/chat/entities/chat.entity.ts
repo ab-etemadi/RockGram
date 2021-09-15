@@ -23,6 +23,8 @@ export class Chat{
     @OneToMany(() => UserChat, (userChat) => userChat.chat, {
         cascade: true
     })
+
     public userChat?: UserChat[];
+
 
 }

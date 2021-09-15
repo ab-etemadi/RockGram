@@ -15,7 +15,7 @@ export class Message{
     date: string;
 
     @ManyToOne(() => User, user => user.messages)
-    user: number;
+    user: User;
 
     @ManyToOne(() => Chat, chat => chat.id)
     chat: number;
