@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 
-import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 
+import { Controller, Get, Param, Post, Body, Patch, Delete } from '@nestjs/common';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 import { MessageService } from './message.service';
@@ -20,8 +20,10 @@ export class MessageController {
     }
 
     @Post()
-    createMessage(@Body() message: CreateMessageDto){
-        return this.messageService.createMessage(message);
+    async createMessage(@Body() message: CreateMessageDto){
+        const userId = this.getUserId();
+        const chatId = this.getChatId();
+        return await this.messageService.createMessage(message,userId,chatId);
     }
 
     @Patch(':id')

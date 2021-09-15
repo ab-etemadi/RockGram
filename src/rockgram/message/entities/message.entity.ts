@@ -12,13 +12,12 @@ export class Message{
     text: string;
 
     @Column()
-    date: Date;
+    date: string;
 
     @ManyToOne(() => User, user => user.messages)
-    user: User;
+    user: number;
 
-
-    @ManyToOne(() => Chat, chat => chat.messages)
-    chat: Chat;
+    @ManyToOne(() => Chat, chat => chat.id)
+    chat: number;
 
 }
