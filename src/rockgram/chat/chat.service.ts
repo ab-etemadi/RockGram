@@ -6,32 +6,28 @@ import { UserChat } from "src/rockgram/user_chat/user-chat";
 import { UserService } from '../user/user.service';
 import { CreateChatDto } from './dto/create-chat.dto';
 import { Chat } from './entities/chat.entity';
-import { ChatRepository } from './repository/chat-repo';
+
+import { ChatRepository } from './repository/chatRepository';
 
 @Injectable()
 export class ChatService {
-    constructor(
-        @InjectRepository(Chat)
-        private readonly chatRepository: Repository<Chat>,
-        @InjectRepository(UserChat)
-        private readonly userChat: Repository<UserChat>,
-        private readonly customChatRep: ChatRepository,
-        // private readonly userService : UserService
+    constructor(private chatRepo : ChatRepository
     ){}
 
     getAllChats(){
-        return this.chatRepository.find({ relations: ["userChat"]});
+        // return this.chatRepo.find({ relations: ["userChat"]});
     }
 
     getAllChatsByType(user: number, type: string){
-        if (type === 'personal') {
-            return this.chatRepository.find()
+        // if (type === 'personal') {
+        //     return this.chatRepository.find()
             
-        }
+        // }
     }
 
-    async createChat(createChatDto: CreateChatDto, userId: number[], msg: number[]){
-        return await this.customChatRep.createChat(createChatDto, userId, msg)
+
+    async createChat(createChatDto: CreateChatDto){
+        return await this.chatRepo.createChat(createChatDto, [{id:undefined,userId:1,chatId:1 , role:"admin"}] )
     }
 
     

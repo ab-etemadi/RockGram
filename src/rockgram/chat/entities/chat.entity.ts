@@ -14,14 +14,17 @@ export class Chat{
     @Column()
     type: string;
 
-    @OneToMany(() => Message, message => message.user, {
+
+    @OneToMany(() => Message, message => message.chat, {
         cascade: true
     })
-    messages: any[];
+    messages?: Message[];
 
     @OneToMany(() => UserChat, (userChat) => userChat.chat, {
         cascade: true
     })
-    public userChat: any[];
+
+    public userChat?: UserChat[];
+
 
 }

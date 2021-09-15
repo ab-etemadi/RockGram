@@ -38,7 +38,7 @@ export class MessageController {
     }
 
     getUserId(){
-        return 3;
+        return 1;
     }
 
     getChatId(){
