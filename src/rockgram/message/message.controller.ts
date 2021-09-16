@@ -28,7 +28,7 @@ export class MessageController {
 
     @Patch(':id')
     updateMessage(@Param('id') messageId: number, @Body() updatedMessage: UpdateMessageDto){
-        return this.messageService.updateMessage(messageId, updatedMessage);
+        return this.messageService.updateMessage(messageId, updatedMessage, this.getUserId());
     }
 
     @Delete(':id')
@@ -38,7 +38,7 @@ export class MessageController {
     }
 
     getUserId(){
-        return 1;
+        return 2;
     }
 
     getChatId(){

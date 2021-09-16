@@ -8,20 +8,17 @@ import { User } from '../user/entities/user.entity';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 import { Message } from './entities/message.entity';
-import { CustomRepository } from './repository/custom-repo';
+import { MessageRepository } from './repository/message-repository';
 
 @Injectable()
 export class MessageService {
 
   constructor(
-    @InjectRepository(Message)
-    private readonly messageRepository: Repository<Message>,
-    private readonly customRepository: CustomRepository,
+    private readonly customRepository: MessageRepository,
    
   ){}
   getMessages(chatId: number) {
-    console.log(chatId);
-    return this.messageRepository.find({});
+    return this.customRepository.getAllMessages(chatId);
   }
 
 
@@ -29,8 +26,8 @@ export class MessageService {
     return await this.customRepository.createMesssage(message, userId, chatId)
   }
 
-  async updateMessage(id: number, message: UpdateMessageDto) {
-   return this.customRepository.updateMessage(id, message);
+  async updateMessage(id: number, message: UpdateMessageDto, userId: number) {
+   return this.customRepository.updateMessage(id, message, userId);
   }
 
   async deleteMessage(id: number, userId:number) {
