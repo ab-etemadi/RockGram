@@ -2,15 +2,17 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CreateChatDto } from "src/rockgram/chat/dto/create-chat.dto";
 import { UserChat } from "src/rockgram/user_chat/user-chat";
-import { AbstractRepository, EntityRepository, Repository } from "typeorm";
+import { AbstractRepository, EntityRepository } from "typeorm";
 import { Chat } from "../entities/chat.entity";
 
 @Injectable()
 @EntityRepository(Chat)
 export class ChatRepository extends AbstractRepository<Chat>{
 
-    public async createChat(createChatDto: CreateChatDto, userChat: UserChat[] ): Promise<Chat>{
-        const { name, type } = createChatDto;
+    public async createChat(createChatDto: CreateChatDto): Promise<Chat>{
+
+        const { name, type , userChat } = createChatDto;
+
         const chat = new Chat();
         chat.name = name;
         chat.type = type; 
@@ -19,5 +21,10 @@ export class ChatRepository extends AbstractRepository<Chat>{
         this.repository.create(chat);
         await this.repository.save(chat);
         return chat;
+    }
+
+    public deleteUserChat(chatId: number, userChatId: number){
+        const chat = this.repository.findOne(chatId);
+        console.log(chat);
     }
 }

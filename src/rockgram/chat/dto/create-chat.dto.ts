@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 
-import { IsString } from "class-validator";
+import { IsNumber, IsString } from "class-validator";
+import { UserChat } from "src/rockgram/user_chat/user-chat";
 
 export class CreateChatDto{
   @IsString()
@@ -8,6 +9,8 @@ export class CreateChatDto{
   @IsString()
   // readonly type: chatType; 
   readonly type: string;
+
+  public userChat: UserChat[];
 }
 
 // export enum chatType{

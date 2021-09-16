@@ -26,6 +26,7 @@ export class MessageService {
 
 
   async createMessage(message: CreateMessageDto, userId: number, chatId: number) {
+    message.date = new Date(); 
     return await this.customRepository.createMesssage(message, userId, chatId)
   }
 

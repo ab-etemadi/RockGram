@@ -16,28 +16,33 @@ export class ChatController {
 
     @Get(':type')
     getAllChatsByType(@Param('type') type: string){
+        console.log(type);
         const user = this.getUserId();
         return this.chatService.getAllChatsByType(user,type);
     }
 
     @Post()
-    createChat(@Body() ChatDetail: CreateChatDto){
-        // const userId =  this.getUserId();
-        // const msgId = this.getUserMsg();
-        return this.chatService.createChat(ChatDetail);
+    createChat(@Query('memberId') memberId: number, @Body() ChatDetail: CreateChatDto){
+        console.log(memberId);
+        const usersChat = this.getUsersChat(memberId);
+        return this.chatService.createChat(ChatDetail,usersChat);
     }
 
     @Delete(':chatId')
-    deleteChat(@Param('chatId') chatId: number ){
-        const userId =  this.getUserId();
-        return this.chatService.deleteChat(userId,chatId );
+    deleteChat(@Param('chatId') chatId: string ){
+        const userChat = this.getUserId();
+        return this.chatService.deleteChat(chatId, userChat);
     }
 
-    getUserId() {
+    getUsersChat(memberId) {
+        return [
+            {userId: this.getUserId, role:"admin"},
+            {userId:memberId, role:"member"},
+        ]
+    }
+    getUserId(){
         return 1;
     }
-    getUserMsg() {
-        return null;
-    }
+   
 
 }

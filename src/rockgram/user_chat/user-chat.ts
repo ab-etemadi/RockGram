@@ -6,7 +6,7 @@ import { User } from "../user/entities/user.entity";
 @Entity()
 export class UserChat {
     @PrimaryGeneratedColumn()
-    id: number;
+    id?: number;
     
     @Column()
     userId: number;
@@ -16,7 +16,7 @@ export class UserChat {
     public user?: User;
 
     @Column()
-    chatId: number;
+    chatId?: number;
   
     @ManyToOne(() => Chat)
     @JoinColumn({ name: 'chatId' })

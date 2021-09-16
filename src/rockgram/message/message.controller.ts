@@ -42,6 +42,8 @@ export class MessageController {
     }
 
     getChatId(){
-        return 2;
+        return 17;
     }
+
+  
 }
