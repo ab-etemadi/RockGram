@@ -22,7 +22,7 @@ export class UserChat {
     @JoinColumn({ name: 'chatId' })
     public chat?: Chat;
     
-    // Custom Colums
+    
     @Column()
     role: string;
 
