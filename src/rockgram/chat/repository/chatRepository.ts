@@ -10,9 +10,7 @@ import { Chat } from "../entities/chat.entity";
 export class ChatRepository extends AbstractRepository<Chat>{
 
     public async createChat(createChatDto: CreateChatDto): Promise<Chat>{
-
         const { name, type , userChat } = createChatDto;
-
         const chat = new Chat();
         chat.name = name;
         chat.type = type; 
@@ -23,8 +21,5 @@ export class ChatRepository extends AbstractRepository<Chat>{
         return chat;
     }
 
-    public deleteUserChat(chatId: number, userChatId: number){
-        const chat = this.repository.findOne(chatId);
-        console.log(chat);
-    }
+
 }

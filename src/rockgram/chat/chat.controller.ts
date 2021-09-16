@@ -16,22 +16,21 @@ export class ChatController {
 
     @Get(':type')
     getAllChatsByType(@Param('type') type: string){
-        console.log(type);
         const user = this.getUserId();
         return this.chatService.getAllChatsByType(user,type);
     }
 
+    // @Post(':personal')
     @Post()
     createChat(@Query('memberId') memberId: number, @Body() ChatDetail: CreateChatDto){
-        console.log(memberId);
         const usersChat = this.getUsersChat(memberId);
         return this.chatService.createChat(ChatDetail,usersChat);
     }
 
     @Delete(':chatId')
-    deleteChat(@Param('chatId') chatId: string ){
-        const userChat = this.getUserId();
-        return this.chatService.deleteChat(chatId, userChat);
+    deleteChat(@Param('chatId') chatId: number ){
+        const user = this.getUserId();
+        return this.chatService.deleteChat(chatId, user);
     }
 
     getUsersChat(memberId) {

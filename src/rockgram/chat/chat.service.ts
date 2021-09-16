@@ -12,25 +12,18 @@ export class ChatService {
     constructor(
         @InjectRepository(Chat)
         private readonly chatRepo: Repository<Chat>,
-        private customChatRepo : ChatRepository
+        private customChatRepo : ChatRepository,
+        @InjectRepository(UserChat)
+        private readonly userChatRepos: Repository<UserChat>
     ){}
 
     getAllChats(){
         return this.chatRepo.find({ relations: ["userChat","messages"]});
     }
 
-
-    async findOneChat(id: string){
-        const chat = await this.chatRepo.findOne(id);
-        if (!chat) {
-            throw new NotFoundException(`Chat #(${id}) not found!`)
-        }
-        return chat;
-
-    }
-
     getAllChatsByType(user: number, type: string){
- 
+       const chats = this.chatRepo.find({where: {type: type}})
+       return chats;
     }
 
 
@@ -39,9 +32,8 @@ export class ChatService {
         return await this.customChatRepo.createChat(createChatDto);
     }
 
-    async deleteChat(chatId: string,userChatId: number){
-        const chat = await this.findOneChat(chatId);
-        const userChat = chat.userChat[userChatId];
-        console.log(userChat)
+    async deleteChat(chatId: number, userId: number){
+        const userChat = await this.userChatRepos.find({where: {chatId:chatId, userId:userId}});
+        return this.userChatRepos.remove(userChat);
     }
 }
