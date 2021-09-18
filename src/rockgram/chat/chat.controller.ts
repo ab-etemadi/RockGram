@@ -1,9 +1,10 @@
 /* eslint-disable prettier/prettier */
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ChatService } from './chat.service';
-import {  CreateChatDto } from './dto/create-chat.dto';
+import {  CreateGroupChatDto } from './dto/create-group-chat.dto';
 import { AddDeleteChatMemberDto } from './dto/add-delete-chat-member.dto';
 import { UpdateChatDto } from './dto/update-chat.dto';
+import { CreatePersonalChatDto } from './dto/create-personal-chat.dto';
 @Controller('chat')
 export class ChatController {
     constructor(
@@ -23,16 +24,16 @@ export class ChatController {
     }
 
     @Post(':personal')
-    createPersonalChat(@Body() ChatDetail: CreateChatDto){
+    createPersonalChat(@Body() createPersonalChatDto: CreatePersonalChatDto){
         const userId = this.getUserId();
-        return this.chatService.createPersonalChat(ChatDetail,userId);
+        return this.chatService.createPersonalChat(createPersonalChatDto, userId);
     }
 
     // @Post(':group')
     @Post()
-    createGroupChat(@Body() chatDetail: CreateChatDto){
+    createGroupChat(@Body() createGroupChatDto: CreateGroupChatDto){
         const userId = this.getUserId();
-        return this.chatService.createGroupChat(chatDetail, userId);
+        return this.chatService.createGroupChat(createGroupChatDto, userId);
     }
 
     @Patch(":chatId")

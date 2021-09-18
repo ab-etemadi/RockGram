@@ -1,6 +1,4 @@
 import { BadRequestException, Inject, Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { CreateChatDto } from "src/rockgram/chat/dto/create-chat.dto";
 import { AbstractRepository, EntityRepository } from "typeorm";
 import { CreateMessageDto } from "./dto/create-message.dto";
 import { UpdateMessageDto } from "./dto/update-message.dto";
