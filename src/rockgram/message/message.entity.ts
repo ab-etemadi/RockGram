@@ -11,8 +11,8 @@ export class Message{
     @Column()
     text: string;
 
-    @Column('date')
-    date?: Date;
+    @Column()
+    date: Date;
 
     @Column()
     userId?: number;

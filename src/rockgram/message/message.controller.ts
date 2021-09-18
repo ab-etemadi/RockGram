@@ -1,10 +1,12 @@
 /* eslint-disable prettier/prettier */
 
 
-import { Controller, Get, Param, Post, Body, Patch, Delete } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Patch, Delete, Req, Query } from '@nestjs/common';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 import { MessageService } from './message.service';
+import { Request } from 'express';
+import { PaginationQueryDto } from '../common/paginationQuery.dto';
 
 @Controller('message')
 
@@ -14,10 +16,16 @@ export class MessageController {
     ){}
 
     @Get('/:chatId')
-    findAllMessages(@Param('chatId') chatId: number){
-       return this.messageService.getMessages(chatId)
+    findAllMessages(@Param('chatId') chatId: number, @Req() req:Request, @Query() paginationQuery: PaginationQueryDto){
+       return this.messageService.getMessages(chatId,req,paginationQuery)
 
     }
+
+    @Get(":search/:chatId")
+    searchMessage(@Req() req: Request, @Param("chatId") chatId: number,){
+        return this.messageService.searchMsg(req, chatId);
+    }
+
 
     @Post()
     async createMessage(@Body() message: CreateMessageDto){
@@ -38,11 +46,11 @@ export class MessageController {
     }
 
     getUserId(){
-        return 2;
+        return 1;
     }
 
     getChatId(){
-        return 17;
+        return 2;
     }
 
   
