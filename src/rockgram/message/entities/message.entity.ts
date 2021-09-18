@@ -14,10 +14,18 @@ export class Message{
     @Column('date')
     date?: Date;
 
-    @ManyToOne(() => User, user => user.messages)
+    @Column()
+    userId?: number;
+
+    @ManyToOne(() => User,)
+    @JoinColumn({ name: 'userId' })
     user: User;
 
-    @ManyToOne(() => Chat, chat => chat.id)
-    chat: number;
+    @Column()
+    chatId?: number;
+
+    @ManyToOne(() => Chat,)
+    @JoinColumn({ name: 'chatId' })
+    chat: Chat;
 
 }
