@@ -28,7 +28,7 @@ export class ChatController {
         return this.chatService.createPersonalChat(ChatDetail,userId);
     }
 
-    // @Post(':addgroup')
+    // @Post(':group')
     @Post()
     createGroupChat(@Body() chatDetail: CreateChatDto){
         const userId = this.getUserId();

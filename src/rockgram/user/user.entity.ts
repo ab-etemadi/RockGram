@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { UserChat } from "src/rockgram/user_chat/user-chat";
-import { Message } from "src/rockgram/message/entities/message.entity";
+import { Message } from "src/rockgram/message/message.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()

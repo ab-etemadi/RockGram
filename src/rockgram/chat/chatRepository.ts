@@ -1,10 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
 import { CreateChatDto } from "src/rockgram/chat/dto/create-chat.dto";
-import { UserChat } from "src/rockgram/user_chat/user-chat";
 import { AbstractRepository, EntityRepository } from "typeorm";
-import { UpdateChatDto } from "../dto/update-chat.dto";
-import { Chat } from "../entities/chat.entity";
+import { Chat } from "./chat.entity";
+import { UpdateChatDto } from "./dto/update-chat.dto";
 
 @Injectable()
 @EntityRepository(Chat)

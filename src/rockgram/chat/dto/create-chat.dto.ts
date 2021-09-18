@@ -7,7 +7,6 @@ export class CreateChatDto{
   // @IsString()
   public name?: string;
   // @IsString()
-  // readonly type: chatType; 
   public type?: string;
 
   // @IsNumber()
@@ -15,8 +14,3 @@ export class CreateChatDto{
 
   public userChat: UserChat[];
 }
-
-// export enum chatType{
-//   personal = "PERSONAL",
-//   group = "GROUP"
-// }

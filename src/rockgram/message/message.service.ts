@@ -2,13 +2,13 @@
 import { Injectable, NotFoundException, Options } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Chat } from '../chat/entities/chat.entity';
+import { Chat } from '../chat/chat.entity';
 import { CreateUserDto } from '../user/dto/create-user.dto';
-import { User } from '../user/entities/user.entity';
+import { User } from '../user/user.entity';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
-import { Message } from './entities/message.entity';
-import { MessageRepository } from './repository/message-repository';
+import { Message } from './message.entity';
+import { MessageRepository } from './message-repository';
 
 @Injectable()
 export class MessageService {

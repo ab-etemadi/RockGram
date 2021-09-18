@@ -4,9 +4,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserChat } from "src/rockgram/user_chat/user-chat";
 import { CreateChatDto } from './dto/create-chat.dto';
-import { Chat } from './entities/chat.entity';
-import { ChatRepository } from './repository/chatRepository';
-import { User } from '../user/entities/user.entity';
+import { Chat } from './chat.entity';
+import { ChatRepository } from './chatRepository';
+import { User } from '../user/user.entity';
 import { UpdateChatDto } from './dto/update-chat.dto';
 
 @Injectable()
@@ -26,6 +26,7 @@ export class ChatService {
     }
 
     getAllChatsByType(user: number, type: string){
+
        const chats = this.chatRepo.find({where: {type: type}})
        return chats;
     }
@@ -52,8 +53,7 @@ export class ChatService {
         return this.customChatRepo.updateGroupChat(updateChatDto, chatId);
     }
     addGroupMember(chatId: number, userId: number){
-        const member = this.userChatRepos.create({userId:userId, chatId: chatId, role: "member"});
-        console.log(member);
+        const member = this.userChatRepos.create({userId:userId, chatId: chatId, role: "member"})
         return this.userChatRepos.save(member);
     }
 
