@@ -1,13 +1,14 @@
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { ConflictException, HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserChat } from "src/rockgram/user_chat/user-chat";
-import { CreateChatDto } from './dto/create-chat.dto';
+import {  CreateGroupChatDto } from './dto/create-group-chat.dto';
 import { Chat } from './chat.entity';
 import { ChatRepository } from './chatRepository';
 import { User } from '../user/user.entity';
 import { UpdateChatDto } from './dto/update-chat.dto';
+import { CreatePersonalChatDto } from './dto/create-personal-chat.dto';
 
 @Injectable()
 export class ChatService {
@@ -26,34 +27,34 @@ export class ChatService {
     }
 
     getAllChatsByType(user: number, type: string){
-
        const chats = this.chatRepo.find({where: {type: type}})
        return chats;
     }
 
-    async createPersonalChat(createChatDto: CreateChatDto, userId: number){
-        const { membersId } = createChatDto;
-        createChatDto.type = "personal";
-        createChatDto.name = (await this.userRepos.findOne(userId)).fullname +" & "+(await this.userRepos.findOne(membersId[0])).fullname;
-        createChatDto.userChat = [{userId: userId, role: "Admin"},{userId: membersId[0], role: "Admin"}];
-        return await this.customChatRepo.createChat(createChatDto);
+
+
+    async createPersonalChat(createPersonalChatDto: CreatePersonalChatDto, userId: number){
+        const name = (await this.userRepos.findOne(userId))
+                            .fullname +" & "+
+                            (await this.userRepos.findOne(createPersonalChatDto.memberId))
+                            .fullname;
+        return await this.customChatRepo.createPersonalChat(createPersonalChatDto, userId, name);
     }
 
-    async createGroupChat(createChatDto: CreateChatDto, userId: number){
-        createChatDto.type = "group";
-        createChatDto.userChat = [{userId: userId, role: "Admin"}];
-        const { membersId } = createChatDto;
-        for (let i = 0; i < membersId.length; i++) {
-            createChatDto.userChat.push({userId: membersId[i], role: "member"});
-        }
-        return await this.customChatRepo.createGroupChat(createChatDto);  
+    async createGroupChat(createGroupChatDto: CreateGroupChatDto, userId: number){
+        return await this.customChatRepo.createGroupChat(createGroupChatDto, userId);  
     }
 
     async updateGroupChat(updateChatDto: UpdateChatDto, chatId: number){
         return this.customChatRepo.updateGroupChat(updateChatDto, chatId);
     }
-    addGroupMember(chatId: number, userId: number){
+    
+    async addGroupMember(chatId: number, userId: number){
         const member = this.userChatRepos.create({userId:userId, chatId: chatId, role: "member"})
+        const existingMember = await this.userChatRepos.find({where: {chatId:chatId, userId:userId}});
+        if (existingMember[0]) {
+            throw new ConflictException(`User with id: ${userId} already exist in this chat!`)
+        }
         return this.userChatRepos.save(member);
     }
 

@@ -3,7 +3,7 @@
 import { IsNumber, IsString } from "class-validator";
 import { UserChat } from "src/rockgram/user_chat/user-chat";
 
-export class CreateChatDto{
+export class CreateGroupChatDto{
   // @IsString()
   public name?: string;
   // @IsString()
