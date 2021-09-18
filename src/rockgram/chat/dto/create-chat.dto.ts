@@ -4,11 +4,14 @@ import { IsNumber, IsString } from "class-validator";
 import { UserChat } from "src/rockgram/user_chat/user-chat";
 
 export class CreateChatDto{
-  @IsString()
-  readonly name: string;
-  @IsString()
+  // @IsString()
+  public name?: string;
+  // @IsString()
   // readonly type: chatType; 
-  readonly type: string;
+  public type?: string;
+
+  // @IsNumber()
+  public membersId?: number[];
 
   public userChat: UserChat[];
 }
