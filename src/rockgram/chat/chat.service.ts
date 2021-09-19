@@ -51,8 +51,8 @@ export class ChatService {
     
     async addGroupMember(chatId: number, userId: number){
         const member = this.userChatRepos.create({userId:userId, chatId: chatId, role: "member"})
-        const existingMember = await this.userChatRepos.find({where: {chatId:chatId, userId:userId}});
-        if (existingMember[0]) {
+        const existingMember = await this.userChatRepos.findOne({where: {chatId:chatId, userId:userId}});
+        if (existingMember) {
             throw new ConflictException(`User with id: ${userId} already exist in this chat!`)
         }
         return this.userChatRepos.save(member);
