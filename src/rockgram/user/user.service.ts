@@ -18,6 +18,14 @@ export class UserService {
         return this.userRepository.find({ relations: ["userChat"] });
     }
 
+
+    async findOne(email: string): Promise<User | undefined>{
+        const user = await this.userRepository.find({where: {email: email}});
+        return user[0]
+
+    }
+
+
     async findOneUser(id: string){
         const user = await this.userRepository.findOne(id);
         if (!user) {
