@@ -7,11 +7,6 @@ export class CreateMessageDto {
     @IsString()
     readonly text: string;
 
-
-    
-    // @IsDate()
-    public date?: Date;
-
 }
 
 

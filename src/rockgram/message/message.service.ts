@@ -9,6 +9,8 @@ import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 import { Message } from './message.entity';
 import { MessageRepository } from './message-repository';
+import { Request } from 'express';
+import { PaginationQueryDto } from '../common/paginationQuery.dto';
 
 @Injectable()
 export class MessageService {
@@ -17,13 +19,16 @@ export class MessageService {
     private readonly customRepository: MessageRepository,
    
   ){}
-  getMessages(chatId: number) {
-    return this.customRepository.getAllMessages(chatId);
+   getMessages(chatId: number, req: Request, paginationQuery: PaginationQueryDto) {
+    return this.customRepository.getAllMessages(chatId, req, paginationQuery);
+  }
+
+  async searchMsg(req:Request, chatId: number, ){
+    return await this.customRepository.searchMessage(req, chatId,);
   }
 
 
   async createMessage(message: CreateMessageDto, userId: number, chatId: number) {
-    message.date = new Date(); 
     return await this.customRepository.createMesssage(message, userId, chatId)
   }
 

@@ -3,24 +3,40 @@ import { AbstractRepository, EntityRepository } from "typeorm";
 import { CreateMessageDto } from "./dto/create-message.dto";
 import { UpdateMessageDto } from "./dto/update-message.dto";
 import { Message } from "./message.entity";
+import { Request } from "express";
+import { PaginationQueryDto } from "../common/paginationQuery.dto";
+import { off } from "process";
 
 @Injectable()
 @EntityRepository(Message)
 export class MessageRepository extends AbstractRepository<Message> {
 
+
+    public async searchMessage(req : Request, chatId: number){
+        const builder = await this.repository.createQueryBuilder('messages');
+        if(req.query.s){
+            builder.where("messages.text LIKE :s", {s: `%${req.query.s}%`})
+            .andWhere("messages.chatId LIKE :i", {i: `%${chatId}%`});
+        }
+        return await builder.getMany();
+    }
+
    
-    public getAllMessages(chatId: number){
-        return this.repository.find({where: {chatId : chatId}});
+    public async getAllMessages(chatId: number, req: Request, paginationQuery: PaginationQueryDto){
+        const {limit, offset} = paginationQuery;
+        return await 
+        this.repository
+        .find({where: {chatId : chatId}, order: {date: "ASC"}, skip: offset, take: limit});
     }
     public async createMesssage(createMessageDto: CreateMessageDto, userId: number, chatId: number ): Promise<Message>{
-        const {text, date,} = createMessageDto;
-        
+        const {text} = createMessageDto; 
         const message = new Message();
-        message.date = date;
         message.text = text; 
+        message.date = new Date();
         message.userId = userId;
         message.chatId = chatId;
 
+        await this.repository.create(message);
         await this.repository.save(message);
         return message;
     }
