@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CommonModule } from './rockgram/common/common.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -19,10 +20,12 @@ import { CommonModule } from './rockgram/common/common.module';
       database: process.env.DATABASE_NAME,
       autoLoadEntities: true,
       synchronize: true,
-    })
+    }),
+    AuthModule
  
   ],
   controllers: [AppController],
   providers: [AppService],
+  
 })
 export class AppModule {}

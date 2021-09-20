@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -18,6 +18,14 @@ export class UserService {
         return this.userRepository.find({ relations: ["userChat"] });
     }
 
+
+    async findOne(email: string): Promise<User | undefined>{
+        const user = await this.userRepository.find({where: {email: email}});
+        return user[0]
+
+    }
+
+
     async findOneUser(id: string){
         const user = await this.userRepository.findOne(id);
         if (!user) {
@@ -27,10 +35,20 @@ export class UserService {
 
     }
 
-    createUser(createUserDto: CreateUserDto){
+
+
+    async createUser(createUserDto: CreateUserDto){
+        const existingUser = await this.userRepository.findOne({where: {email:createUserDto.email}});
+        if (existingUser) {
+            throw new ConflictException(`User with email: ${existingUser.email} already exist! Please use anther email for sigup.`)
+        }
+
         const user = this.userRepository.create(createUserDto);
         return this.userRepository.save(user);
     }
+
+
+
 
     async updateUser(id: string, updateUserDto: UpdateUserDto){
         const user = await this.userRepository.preload({
