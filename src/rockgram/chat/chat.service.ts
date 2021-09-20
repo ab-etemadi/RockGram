@@ -9,6 +9,8 @@ import { ChatRepository } from './chatRepository';
 import { User } from '../user/user.entity';
 import { UpdateChatDto } from './dto/update-chat.dto';
 import { CreatePersonalChatDto } from './dto/create-personal-chat.dto';
+import { PaginationQueryDto } from '../common/paginationQuery.dto';
+import { Request } from 'express';
 
 @Injectable()
 export class ChatService {
@@ -26,12 +28,23 @@ export class ChatService {
         return this.chatRepo.find({ relations: ["userChat","messages"]});
     }
 
-    getAllChatsByType(user: number, type: string){
-       const chats = this.chatRepo.find({where: {type: type}})
+    async getAllChatsByType(userId: number, type: string, paginationQuery: PaginationQueryDto){
+       const {limit, offset} = paginationQuery;
+       const chats = await this.chatRepo.createQueryBuilder('chats')
+       .innerJoinAndSelect('chats.userChat', 'userChat')
+       .where({
+         type: type
+       })
+       .andWhere('userChat.userId = :userId', { userId: userId })
+       .limit(limit)
+       .offset(offset)
+       .getMany();
        return chats;
     }
 
-
+    async searchcht(req:Request, userId: number, ){
+        return await this.customChatRepo.searchChat(req, userId,);
+      }
 
     async createPersonalChat(createPersonalChatDto: CreatePersonalChatDto, userId: number){
         const name = (await this.userRepos.findOne(userId))

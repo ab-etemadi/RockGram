@@ -14,6 +14,9 @@ export class Chat{
     @Column()
     type: string;
 
+    @Column()
+    date: Date;
+
 
     @OneToMany(() => Message, message => message.chat, {
         cascade: true
@@ -21,7 +24,7 @@ export class Chat{
     messages?: Message[];
 
     @OneToMany(() => UserChat, (userChat) => userChat.chat, {
-        cascade: true
+        cascade: true,
     })
 
     public userChat?: UserChat[];

@@ -1,11 +1,12 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Delete, Get, Param, Patch, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Request, UseGuards } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import {  CreateGroupChatDto } from './dto/create-group-chat.dto';
 import { AddDeleteChatMemberDto } from './dto/add-delete-chat-member.dto';
 import { UpdateChatDto } from './dto/update-chat.dto';
 import { CreatePersonalChatDto } from './dto/create-personal-chat.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { PaginationQueryDto } from '../common/paginationQuery.dto';
 @Controller('chat')
 export class ChatController {
     constructor(
@@ -21,9 +22,9 @@ export class ChatController {
 
     @UseGuards(JwtAuthGuard)
     @Get(':type')
-    getAllChatsByType(@Param('type') type: string, @Request() req){
+    getAllChatsByType(@Param('type') type: string, @Request() req, @Query() paginationQuery: PaginationQueryDto){
         const userId = req.user.id;
-        return this.chatService.getAllChatsByType(userId,type);
+        return this.chatService.getAllChatsByType(userId,type, paginationQuery);
     }
 
     @UseGuards(JwtAuthGuard)

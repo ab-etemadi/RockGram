@@ -18,7 +18,7 @@ export class UserChat {
     @Column()
     chatId?: number;
   
-    @ManyToOne(() => Chat)
+    @ManyToOne(() => Chat,)
     @JoinColumn({ name: 'chatId' })
     public chat?: Chat;
     
