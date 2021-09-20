@@ -11,6 +11,11 @@ import { off } from "process";
 @EntityRepository(Message)
 export class MessageRepository extends AbstractRepository<Message> {
 
+    constructor(
+    
+    ){
+        super();
+    }
 
     public async searchMessage(req : Request, chatId: number){
         const builder = await this.repository.createQueryBuilder('messages');

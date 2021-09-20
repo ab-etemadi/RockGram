@@ -1,10 +1,12 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import {  CreateGroupChatDto } from './dto/create-group-chat.dto';
 import { AddDeleteChatMemberDto } from './dto/add-delete-chat-member.dto';
 import { UpdateChatDto } from './dto/update-chat.dto';
 import { CreatePersonalChatDto } from './dto/create-personal-chat.dto';
+import { PaginationQueryDto } from '../common/paginationQuery.dto';
+import { Request } from 'express';
 @Controller('chat')
 export class ChatController {
     constructor(
@@ -17,23 +19,31 @@ export class ChatController {
         return this.chatService.getAllChats();
     }
 
-    @Get(':type')
-    getAllChatsByType(@Param('type') type: string){
+    @Get('/:type')
+    getAllChatsByType(@Param('type') type: string, @Query() paginationQuery: PaginationQueryDto){
         const user = this.getUserId();
-        return this.chatService.getAllChatsByType(user,type);
+        console.log(type);
+        return this.chatService.getAllChatsByType(user,type, paginationQuery);
     }
 
     @Post(':personal')
     createPersonalChat(@Body() createPersonalChatDto: CreatePersonalChatDto){
         const userId = this.getUserId();
+        
         return this.chatService.createPersonalChat(createPersonalChatDto, userId);
     }
 
-    // @Post(':group')
     @Post()
     createGroupChat(@Body() createGroupChatDto: CreateGroupChatDto){
         const userId = this.getUserId();
         return this.chatService.createGroupChat(createGroupChatDto, userId);
+    }
+
+    @Get(":search/:userId")
+    searchChat(@Req() req: Request, @Param("userId") userId: number,){
+        if(userId == this.getUserId()){  
+        return this.chatService.searchcht(req, userId);
+        }
     }
 
     @Patch(":chatId")

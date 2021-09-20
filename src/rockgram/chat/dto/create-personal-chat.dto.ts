@@ -6,8 +6,6 @@ import { IsNumber } from "class-validator";
 export class CreatePersonalChatDto{
 
   
-  // @IsNumber()
-  @Type(() => Number)
   public memberId: number;
 
 }

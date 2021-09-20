@@ -23,7 +23,9 @@ export class MessageController {
 
     @Get(":search/:chatId")
     searchMessage(@Req() req: Request, @Param("chatId") chatId: number,){
+        if(chatId == this.getChatId()){
         return this.messageService.searchMsg(req, chatId);
+         }
     }
 
 
