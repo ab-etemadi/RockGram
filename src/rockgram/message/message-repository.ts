@@ -5,17 +5,11 @@ import { UpdateMessageDto } from "./dto/update-message.dto";
 import { Message } from "./message.entity";
 import { Request } from "express";
 import { PaginationQueryDto } from "../common/paginationQuery.dto";
-import { off } from "process";
 
 @Injectable()
 @EntityRepository(Message)
 export class MessageRepository extends AbstractRepository<Message> {
 
-    constructor(
-    
-    ){
-        super();
-    }
 
     public async searchMessage(req : Request, chatId: number){
         const builder = await this.repository.createQueryBuilder('messages');

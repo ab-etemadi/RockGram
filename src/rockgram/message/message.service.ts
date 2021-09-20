@@ -11,12 +11,15 @@ import { Message } from './message.entity';
 import { MessageRepository } from './message-repository';
 import { Request } from 'express';
 import { PaginationQueryDto } from '../common/paginationQuery.dto';
+import { UserChat } from '../user_chat/user-chat';
 
 @Injectable()
 export class MessageService {
 
   constructor(
     private readonly customRepository: MessageRepository,
+    @InjectRepository(UserChat)
+        private readonly userChatRepos:Repository<UserChat>
    
   ){}
    getMessages(chatId: number, req: Request, paginationQuery: PaginationQueryDto) {
@@ -29,6 +32,10 @@ export class MessageService {
 
 
   async createMessage(message: CreateMessageDto, userId: number, chatId: number) {
+    const existingChat = await this.userChatRepos.findOne({where: {chatId:chatId, userId:userId}});
+    if (!existingChat) {
+        throw new NotFoundException(`chat not found!`)
+    }
     return await this.customRepository.createMesssage(message, userId, chatId)
   }
 

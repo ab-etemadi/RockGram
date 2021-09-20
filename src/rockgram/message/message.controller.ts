@@ -30,10 +30,11 @@ export class MessageController {
     }
 
     @UseGuards(JwtAuthGuard)
+
     @Post("/:chatId")
     async createMessage(@Body() message: CreateMessageDto, @Param('chatId') chatId: number, @Request() req){
-        
         return await this.messageService.createMessage(message,req.user.id,chatId);
+
     }
 
     @UseGuards(JwtAuthGuard)
@@ -49,10 +50,6 @@ export class MessageController {
         return this.messageService.deleteMessage(id, req.user.id);
     }
 
-
-    getChatId(){
-        return 2;
-    }
 
   
 }
