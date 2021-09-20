@@ -26,16 +26,13 @@ export class MessageController {
     @UseGuards(JwtAuthGuard)
     @Get(":search/:chatId")
     searchMessage(@Req() req: Request, @Param("chatId") chatId: number,){
-        if(chatId == this.getChatId()){
         return this.messageService.searchMsg(req, chatId);
-         }
     }
 
     @UseGuards(JwtAuthGuard)
-    @Post()
-    async createMessage(@Body() message: CreateMessageDto){
+    @Post(':chatId')
+    async createMessage(@Body() message: CreateMessageDto, @Param('chatId') chatId:number){
         const userId = this.getUserId();
-        const chatId = this.getChatId();
         return await this.messageService.createMessage(message,userId,chatId);
     }
 
@@ -55,10 +52,5 @@ export class MessageController {
     getUserId(){
         return 1;
     }
-
-    getChatId(){
-        return 2;
-    }
-
   
 }
