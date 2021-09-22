@@ -19,7 +19,9 @@ export class MessageService {
   constructor(
     private readonly customRepository: MessageRepository,
     @InjectRepository(UserChat)
-        private readonly userChatRepos:Repository<UserChat>
+        private readonly userChatRepos:Repository<UserChat>,
+    @InjectRepository(Chat)
+        private readonly chatRepository: Repository<Chat>,    
    
   ){}
    getMessages(chatId: number, req: Request, paginationQuery: PaginationQueryDto) {
@@ -32,10 +34,14 @@ export class MessageService {
 
 
   async createMessage(message: CreateMessageDto, userId: number, chatId: number) {
+    
     const existingChat = await this.userChatRepos.findOne({where: {chatId:chatId, userId:userId}});
     if (!existingChat) {
         throw new NotFoundException(`chat not found!`)
     }
+    const chat = await this.chatRepository.findOne({where:{id : chatId}});
+    chat.date = new Date();
+    await this.chatRepository.save(chat);
     return await this.customRepository.createMesssage(message, userId, chatId)
   }
 

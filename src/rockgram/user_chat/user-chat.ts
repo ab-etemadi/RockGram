@@ -26,5 +26,8 @@ export class UserChat {
     @Column()
     role: string;
 
+    @Column()
+    receiverId?: number;
+
 
 }
