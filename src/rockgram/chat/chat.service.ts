@@ -32,10 +32,9 @@ export class ChatService {
        const {limit, offset} = paginationQuery;
        const chats = await this.chatRepo.createQueryBuilder('chats')
        .innerJoinAndSelect('chats.userChat', 'userChat')
-       .where({
-         type: type
-       })
+       .where({ type: type,})
        .andWhere('userChat.userId = :userId', { userId: userId })
+       .orderBy({'date': 'DESC'})
        .limit(limit)
        .offset(offset)
        .getMany();
@@ -47,11 +46,17 @@ export class ChatService {
       }
 
     async createPersonalChat(createPersonalChatDto: CreatePersonalChatDto, userId: number){
+        const { memberId } = createPersonalChatDto;
+        const existChat = await this.userChatRepos.findOne({where: {userId: userId, receiverId: memberId}})
+        if(!existChat){
         const name = (await this.userRepos.findOne(userId))
                             .fullname +" & "+
                             (await this.userRepos.findOne(createPersonalChatDto.memberId))
                             .fullname;
         return await this.customChatRepo.createPersonalChat(createPersonalChatDto, userId, name);
+        } else {
+            throw new ConflictException('chat exist');
+        }
     }
 
     async createGroupChat(createGroupChatDto: CreateGroupChatDto, userId: number){
@@ -66,7 +71,7 @@ export class ChatService {
         const member = this.userChatRepos.create({userId:userId, chatId: chatId, role: "member"})
         const existingMember = await this.userChatRepos.findOne({where: {chatId:chatId, userId:userId}});
         if (existingMember) {
-            throw new ConflictException(`User with id: ${userId} already exist in this chat!`)
+            throw new ConflictException(`User with id: ${userId} already exist in this chat!`);
         }
         return this.userChatRepos.save(member);
     }

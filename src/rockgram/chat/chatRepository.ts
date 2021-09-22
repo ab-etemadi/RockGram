@@ -17,7 +17,7 @@ export class ChatRepository extends AbstractRepository<Chat>{
         chat.name = name;
         chat.date = new Date();
         chat.type = "personal"; 
-        chat.userChat =  [{userId: userId, role: "admin"},{userId: memberId, role: "admin"}];
+        chat.userChat =  [{userId: userId, role: "admin",receiverId: memberId},{userId: memberId, role: "admin", receiverId:userId}];
 
         console.log(chat)
         this.repository.create(chat);
@@ -45,7 +45,6 @@ export class ChatRepository extends AbstractRepository<Chat>{
     }
 
     public async searchChat(req : Request, userId: number){
-        console.log("searchMethod called");
         const builder = this.repository.createQueryBuilder('chats');
         if(req.query.s){
             builder.innerJoinAndSelect('chats.userChat', 'userChat')

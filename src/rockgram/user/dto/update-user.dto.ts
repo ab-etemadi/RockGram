@@ -6,5 +6,8 @@ export class UpdateUserDto{
     readonly fullname: string;
 
     @IsString()
-    readonly password: string;
+    readonly currentPassword: string;
+
+    @IsString()
+    readonly newPassword: string;
 }

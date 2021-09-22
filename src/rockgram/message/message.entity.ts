@@ -15,14 +15,14 @@ export class Message{
     date: Date;
 
     @Column()
-    userId?: number;
+    userId: number;
 
     @ManyToOne(() => User,)
     @JoinColumn({ name: 'userId' })
     user: User;
 
     @Column()
-    chatId?: number;
+    chatId: number;
 
     @ManyToOne(() => Chat,)
     @JoinColumn({ name: 'chatId' })

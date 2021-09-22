@@ -1,15 +1,18 @@
 import { BadRequestException, Inject, Injectable } from "@nestjs/common";
-import { AbstractRepository, EntityRepository } from "typeorm";
+import { AbstractRepository, EntityRepository, Repository } from "typeorm";
 import { CreateMessageDto } from "./dto/create-message.dto";
 import { UpdateMessageDto } from "./dto/update-message.dto";
 import { Message } from "./message.entity";
 import { Request } from "express";
 import { PaginationQueryDto } from "../common/paginationQuery.dto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Chat } from "../chat/chat.entity";
 
 @Injectable()
 @EntityRepository(Message)
 export class MessageRepository extends AbstractRepository<Message> {
 
+   
 
     public async searchMessage(req : Request, chatId: number){
         const builder = await this.repository.createQueryBuilder('messages');
@@ -27,6 +30,7 @@ export class MessageRepository extends AbstractRepository<Message> {
         this.repository
         .find({where: {chatId : chatId}, order: {date: "ASC"}, skip: offset, take: limit});
     }
+
     public async createMesssage(createMessageDto: CreateMessageDto, userId: number, chatId: number ): Promise<Message>{
         const {text} = createMessageDto; 
         const message = new Message();
@@ -35,7 +39,8 @@ export class MessageRepository extends AbstractRepository<Message> {
         message.userId = userId;
         message.chatId = chatId;
 
-        await this.repository.create(message);
+
+        this.repository.create(message);
         await this.repository.save(message);
         return message;
     }
