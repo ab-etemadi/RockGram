@@ -6,8 +6,10 @@ import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 import { MessageService } from './message.service';
 import { PaginationQueryDto } from '../common/paginationQuery.dto';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CustomReq } from './customDecorator';
+import { Public } from '../common/decorators/public.decorators';
+import { GetCurrentUserById } from '../common/decorators/get-user-by-id-decorator';
+import { JwtGuard } from 'src/auth/jwt.guard';
 
 @Controller('message')
 
@@ -16,34 +18,30 @@ export class MessageController {
         private readonly messageService: MessageService
     ){}
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtGuard)
     @Get('/:chatId')
     findAllMessages(@Param('chatId') chatId: number, @CustomReq() req, @Query() paginationQuery: PaginationQueryDto){
        return this.messageService.getMessages(chatId,req,paginationQuery)
 
     }
-
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtGuard) 
     @Get(":search/:chatId")
     searchMessage(@CustomReq() req, @Param("chatId") chatId: number,){
         return this.messageService.searchMsg(req, chatId);
     }
-
-    @UseGuards(JwtAuthGuard)
-
+    @UseGuards(JwtGuard)
     @Post("/:chatId")
-    async createMessage(@Body() message: CreateMessageDto, @Param('chatId') chatId: number, @Request() req){
-        return await this.messageService.createMessage(message,req.user.id,chatId);
+    async createMessage(@Body() message: CreateMessageDto, @Param('chatId') chatId: number,@GetCurrentUserById() user: any ){
+        console.log(user);
+        return await this.messageService.createMessage(message,2,chatId);
 
     }
-
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtGuard)
     @Patch(':id')
     updateMessage(@Param('id') messageId: number, @Body() updatedMessage: UpdateMessageDto, @Request() req){
         return this.messageService.updateMessage(messageId, updatedMessage, req.user.id);
     }
-
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtGuard)
     @Delete(':id')
     deleteMessage(@Param('id') id: number,@Request() req){
         console.log(`${id} controller`);

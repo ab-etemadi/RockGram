@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtGuard } from 'src/auth/jwt.guard';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
@@ -12,32 +12,31 @@ export class UserController {
     ){}
 
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtGuard)
     @Get()
     findAllUser(){
         return this.userService.findAll();
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtGuard)
     @Get(':id')
     findOneUser(@Param('id') id: string){
         return this.userService.findOneUser(id);
     }
 
-    // @UseGuards(JwtAuthGuard)
     @Post()
     createUser(@Body() createUserDto: CreateUserDto){
         return this.userService.createUser(createUserDto);
     }
 
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtGuard)
     @Patch(':id')
     updateUser(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto){
         return this.userService.updateUser(id, updateUserDto);
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtGuard)
     @Delete(':id')
     deleteUser(@Param('id') id: string){
         return this.userService.deleteUser(id);
