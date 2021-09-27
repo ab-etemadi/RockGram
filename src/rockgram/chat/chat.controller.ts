@@ -5,8 +5,12 @@ import {  CreateGroupChatDto } from './dto/create-group-chat.dto';
 import { AddDeleteChatMemberDto } from './dto/add-delete-chat-member.dto';
 import { UpdateChatDto } from './dto/update-chat.dto';
 import { CreatePersonalChatDto } from './dto/create-personal-chat.dto';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { PaginationQueryDto } from '../common/paginationQuery.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { GetCurrentUserById } from '../common/decorators/get-user-by-id-decorator';
+import { Public } from '../common/decorators/public.decorators';
+import { JwtGuard } from 'src/auth/jwt.guard';
+
 @Controller('chat')
 export class ChatController {
     constructor(
@@ -14,20 +18,20 @@ export class ChatController {
 
     ){}
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtGuard)
     @Get()
     getAllChats(){
         return this.chatService.getAllChats();
     }
-
-    @UseGuards(JwtAuthGuard)
+    // @Public()
+    @UseGuards(JwtGuard)
     @Get(':type')
-    getAllChatsByType(@Param('type') type: string, @Request() req, @Query() paginationQuery: PaginationQueryDto){
-        const userId = req.user.id;
-        return this.chatService.getAllChatsByType(userId,type, paginationQuery);
+    getAllChatsByType(@Param('type') type: string, @GetCurrentUserById() user: any, @Query() paginationQuery: PaginationQueryDto){
+       console.log(user);
+        return this.chatService.getAllChatsByType(user.id,type, paginationQuery);
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtGuard)
     @Post(':personal')
     createPersonalChat(@Body() createPersonalChatDto: CreatePersonalChatDto, @Request() req){
         const userId = req.user.id;
@@ -35,34 +39,33 @@ export class ChatController {
         return this.chatService.createPersonalChat(createPersonalChatDto, userId);
     }
 
-    @UseGuards(JwtAuthGuard)
-    // @Post(':group')
+    @UseGuards(JwtGuard)
     @Post()
     createGroupChat(@Body() createGroupChatDto: CreateGroupChatDto, @Request() req){
         const userId = req.user.id;
         return this.chatService.createGroupChat(createGroupChatDto, userId);
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtGuard)
     @Patch(":chatId")
     updateGroup(@Body() chatDetail: UpdateChatDto, @Param('chatId') chatId: number){
         return this.chatService.updateGroupChat(chatDetail, chatId);
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtGuard)
     @Delete(':chatId')
     deleteChat(@Param('chatId') chatId: number, @Request() req){
         const userId = req.user.id;
         return this.chatService.deleteChat(chatId, userId);
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtGuard)    
     @Delete('group/:chatId')
     deleteGroupMember(@Param('chatId') chatId: number, @Body() chatMember: AddDeleteChatMemberDto){
         return this.chatService.deleteChat(chatId, chatMember.memberId);
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtGuard)
     @Patch('group/:chatId')
     addGroupMember(@Param('chatId') chatId: number, @Body() chatMember: AddDeleteChatMemberDto){
         return this.chatService.addGroupMember(chatId, chatMember.memberId);

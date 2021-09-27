@@ -1,35 +1,36 @@
-import { Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { UserService } from 'src/rockgram/user/user.service';
+import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import { InjectRepository } from "@nestjs/typeorm";
+import { User } from "src/rockgram/user/user.entity";
+import { Repository } from "typeorm";
+import { AuthDto } from "./dto/auth.dto";
+
 
 @Injectable()
-export class AuthService {
-    constructor( private userService: UserService, private jwtService: JwtService){}
+export class AuthService{
+    token: any;
+    constructor(
+        @InjectRepository(User)
+        private readonly userRepository: Repository<User>,
+        private readonly jwtService: JwtService,
+    ){}
+   async login(loginDetail: AuthDto) {
+        const user = await this.userRepository.findOne({where: {email: loginDetail.email}});
+        if(!user) throw new UnauthorizedException("Credential incorrect");
+        if(user.password !== loginDetail.password)
+         throw new UnauthorizedException('Credential incorrect');
 
-
-    async validateUser(email: string, password: string): Promise<any>{
-        const user = await this.userService.findOne(email);
-        if (user && user.password === password) {
-            const { password, email, ...rest } = user;
-            return rest;
-        }
-
-        return null;
-
-
+        return this.signUser(user.id, user.email);
+    }
+    signUser(userId: number, email: string,){
+         this.token = this.jwtService.sign({
+            id: userId,
+            email,
+        });
+        return this.token;
     }
 
-    async login(user: any){
-        const payload = { name: user.fullname, sub: user.id};
-
-        return {
-            id: payload.sub,
-            name: payload.name,
-            access_token: this.jwtService.sign(payload),
-        };
+    getToken(){
+        return this.token;
     }
-
-
-
-
 }

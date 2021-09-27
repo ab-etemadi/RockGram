@@ -1,23 +1,17 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { JwtModule } from '@nestjs/jwt';
-import { PassportModule } from '@nestjs/passport';
-import { UserModule } from 'src/rockgram/user/user.module';
-import { AuthService } from './auth.service';
-import { JwtStrategy } from './jwt.strategy';
-import { LocalStrategy } from './local.strategy';
+import { Module } from "@nestjs/common";
+import { APP_GUARD, Reflector } from "@nestjs/core";
+import { JwtModule } from "@nestjs/jwt";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { User } from "src/rockgram/user/user.entity";
+import { AuthController } from "./auth.controller";
+import { AuthService } from "./auth.service";
+import { JwtStrategy } from "./strategy/jwt.strategy";
 
 @Module({
-  imports: [
-    ConfigModule.forRoot(),
-    UserModule,
-    PassportModule, 
-    JwtModule.register({
-      secret: process.env.SECRET,
-      signOptions: {expiresIn: '3600s'},
-    })
-  ],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
-  exports: [AuthService]
-})
-export class AuthModule {}
+    imports: [TypeOrmModule.forFeature([User]), JwtModule.register({secret: 'SECRET',})],
+    providers: [AuthService, JwtStrategy,],
+    controllers: [AuthController],
+    exports: [AuthModule]
+  })
+  export class AuthModule {}
+  

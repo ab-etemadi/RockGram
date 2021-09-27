@@ -1,11 +1,9 @@
 /* eslint-disable prettier/prettier */
 import { ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
-import * as session from 'express-session';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import * as passport from 'passport';
 import {SwaggerModule, DocumentBuilder} from '@nestjs/swagger'
+import { AuthService } from './auth/auth.service';
 
 
 async function bootstrap() {
