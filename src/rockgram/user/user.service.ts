@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -11,6 +12,7 @@ export class UserService {
     constructor(
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
+        private readonly jwtService: JwtService,
     ){}
 
 
@@ -42,10 +44,19 @@ export class UserService {
         if (existingUser) {
             throw new ConflictException(`User with email: ${existingUser.email} already exist! Please use anther email for sigup.`)
         }
-
-        const user = this.userRepository.create(createUserDto);
-        return this.userRepository.save(user);
+        const savedUser= await this.userRepository.save(createUserDto);
+        
+        return this.signUser(savedUser.id, savedUser.email, savedUser.fullname);
     }
+
+    signUser(userId: number, email: string, fullName: String){
+        const token = this.jwtService.sign({
+           id: userId,
+           email,
+           fullName,
+       });
+       return token;
+   }
 
 
 
