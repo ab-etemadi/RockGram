@@ -11,35 +11,27 @@ import { Request } from "express";
 @EntityRepository(Chat)
 export class ChatRepository extends AbstractRepository<Chat>{
     
-    public async createPersonalChat(createPersonalChatDto: CreatePersonalChatDto, userId: number, name: string): Promise<Chat>{
-        const  { memberId } = createPersonalChatDto;
+    public async createPersonalChat(receiverId: number, userId: number, name: string): Promise<Chat>{
         const chat = new Chat();
         chat.name = name;
         chat.date = new Date();
         chat.type = "personal"; 
-        chat.userChat =  [{userId: userId, role: "admin",receiverId: memberId},{userId: memberId, role: "admin", receiverId:userId}];
-
-        console.log(chat)
-        this.repository.create(chat);
-        await this.repository.save(chat);
-        return chat;
+        chat.userChat =  [{userId: userId, role: "admin",receiverId: receiverId},{userId: receiverId, role: "admin", receiverId:userId}];
+        return await this.repository.save(chat);
     }
 
-    public async createGroupChat(createGroupChatDto: CreateGroupChatDto, userId: number): Promise<Chat>{
-        let { name, type , userChat, membersId } = createGroupChatDto;
+    public async createGroupChat(createGroupChatDto: CreateGroupChatDto, userId: number, membersId: number[]): Promise<Chat>{
+        let { name, type , userChat, } = createGroupChatDto;
         type = "group";
-        userChat = [{userId: userId, role: "admin"}];
+        userChat = [{userId: userId, role: "admin", receiverId: membersId[0]}];
         for (let i = 0; i < membersId.length; i++) {
-            userChat.push({userId: membersId[i], role: "member"});
+            userChat.push({userId: membersId[i], role: "member", receiverId: userId});
         }
-
         const chat = new Chat();
         chat.name = name;
-        chat.type = type; 
+        chat.type = type;
         chat.userChat = userChat;
         chat.date = new Date();
-
-        this.repository.create(chat);
         await this.repository.save(chat);
         return chat;
     }
