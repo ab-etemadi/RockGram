@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
 
 import { Type } from "class-transformer";
-import { IsNumber } from "class-validator";
+import { IsNumber, IsString } from "class-validator";
 
 export class CreatePersonalChatDto{
-  @IsNumber()
-  public memberId: number;
+  @IsString()
+  public memberEmail: string;
 
 }

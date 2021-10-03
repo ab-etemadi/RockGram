@@ -46,21 +46,26 @@ export class ChatService {
       }
 
     async createPersonalChat(createPersonalChatDto: CreatePersonalChatDto, userId: number){
-        const { memberId } = createPersonalChatDto;
-        const existChat = await this.userChatRepos.findOne({where: {userId: userId, receiverId: memberId}})
+        const { memberEmail } = createPersonalChatDto;
+        
+        const receiver = await this.userRepos.findOne({where: {email: memberEmail}});
+        const existChat = await this.userChatRepos.findOne({where: {userId: userId, receiverId: receiver.id}});
         if(!existChat){
         const name = (await this.userRepos.findOne(userId))
-                            .fullname +" & "+
-                            (await this.userRepos.findOne(createPersonalChatDto.memberId))
-                            .fullname;
-        return await this.customChatRepo.createPersonalChat(createPersonalChatDto, userId, name);
+                            .fullname +" & "+ receiver.fullname;
+        return await this.customChatRepo.createPersonalChat(receiver.id, userId, name);
         } else {
             throw new ConflictException('chat exist');
         }
     }
 
     async createGroupChat(createGroupChatDto: CreateGroupChatDto, userId: number){
-        return await this.customChatRepo.createGroupChat(createGroupChatDto, userId);  
+         let membersId = [];
+        for(let i = 0; i < createGroupChatDto.membersEmail.length; i++){
+           let user = await this.userRepos.findOne({where:{email: createGroupChatDto.membersEmail[i]}})
+            membersId.push(user.id);
+        }
+        return await this.customChatRepo.createGroupChat(createGroupChatDto, userId, membersId);  
     }
 
     async updateGroupChat(updateChatDto: UpdateChatDto, chatId: number){

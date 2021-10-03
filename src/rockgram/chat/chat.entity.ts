@@ -2,6 +2,7 @@
 import { UserChat } from "src/rockgram/user_chat/user-chat";
 import { Message } from 'src/rockgram/message/message.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { IsOptional } from "class-validator";
 
 @Entity()
 export class Chat{

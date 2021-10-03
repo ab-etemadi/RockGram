@@ -8,7 +8,6 @@ import { AuthDto } from "./dto/auth.dto";
 
 @Injectable()
 export class AuthService{
-    token: any;
     constructor(
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
@@ -19,18 +18,15 @@ export class AuthService{
         if(!user) throw new UnauthorizedException("Credential incorrect");
         if(user.password !== loginDetail.password)
          throw new UnauthorizedException('Credential incorrect');
-
-        return this.signUser(user.id, user.email);
+        const token = this.signUser(user.id, user.email);
+        return [{...user},token]
     }
     signUser(userId: number, email: string,){
-         this.token = this.jwtService.sign({
+         const token = this.jwtService.sign({
             id: userId,
             email,
         });
-        return this.token;
+        return token;
     }
 
-    getToken(){
-        return this.token;
-    }
 }

@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 
-import { IsArray, IsNumber, IsString } from "class-validator";
+import { IsArray, IsNumber, IsOptional, IsString } from "class-validator";
 import { UserChat } from "src/rockgram/user_chat/user-chat";
 
 export class CreateGroupChatDto{
@@ -8,10 +8,11 @@ export class CreateGroupChatDto{
   name: string;
 
   @IsString()
+  @IsOptional()
   type: string;
 
   @IsArray()
-  public membersId: number[];
+  public membersEmail: string[];
 
   public userChat: UserChat[];
 }
