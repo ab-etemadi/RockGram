@@ -23,19 +23,24 @@ export class ChatController {
     getAllChats(){
         return this.chatService.getAllChats();
     }
+    @UseGuards(JwtGuard)
+    @Get('active/:id')
+    getOneChat(@Param('id') id:string){
+        return this.chatService.findOneChat(id);
+    }
+
     // @Public()
     @UseGuards(JwtGuard)
     @Get(':type')
     getAllChatsByType(@Param('type') type: string, @GetCurrentUserById() user: any, @Query() paginationQuery: PaginationQueryDto){
-       console.log(user);
         return this.chatService.getAllChatsByType(user.id,type, paginationQuery);
     }
+
 
     @UseGuards(JwtGuard)
     @Post(':personal')
     createPersonalChat(@Body() createPersonalChatDto: CreatePersonalChatDto, @Request() req){
         const userId = req.user.id;
-        console.log(userId)
         return this.chatService.createPersonalChat(createPersonalChatDto, userId);
     }
 

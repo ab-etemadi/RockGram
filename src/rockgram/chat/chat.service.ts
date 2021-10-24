@@ -28,6 +28,14 @@ export class ChatService {
         return this.chatRepo.find({ relations: ["userChat","messages"]});
     }
 
+    async findOneChat(id: string){
+        const chat = await this.chatRepo.findOne(id);
+        if (!chat) {
+            throw new NotFoundException(`User #(${id}) not found!`)
+        }
+        return chat;
+    }
+
     async getAllChatsByType(userId: number, type: string, paginationQuery: PaginationQueryDto){
        const {limit, offset} = paginationQuery;
        const chats = await this.chatRepo.createQueryBuilder('chats')
@@ -51,8 +59,7 @@ export class ChatService {
         const receiver = await this.userRepos.findOne({where: {email: memberEmail}});
         const existChat = await this.userChatRepos.findOne({where: {userId: userId, receiverId: receiver.id}});
         if(!existChat){
-        const name = (await this.userRepos.findOne(userId))
-                            .fullname +" & "+ receiver.fullname;
+        const name = (await this.userRepos.findOne(userId)).fullname +" & "+ receiver.fullname;
         return await this.customChatRepo.createPersonalChat(receiver.id, userId, name);
         } else {
             throw new ConflictException('chat exist');

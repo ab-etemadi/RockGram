@@ -18,13 +18,15 @@ export class AuthService{
         if(!user) throw new UnauthorizedException("Credential incorrect");
         if(user.password !== loginDetail.password)
          throw new UnauthorizedException('Credential incorrect');
-        const token = this.signUser(user.id, user.email);
-        return [{...user},token]
+        const token = this.signUser(user.id, user.email, user.password, user.fullname);
+        return token
     }
-    signUser(userId: number, email: string,){
+    signUser(userId: number, email: string, password:string, fullname:string){
          const token = this.jwtService.sign({
             id: userId,
             email,
+            password,
+            fullname,
         });
         return token;
     }

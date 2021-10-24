@@ -32,8 +32,7 @@ export class MessageController {
     @UseGuards(JwtGuard)
     @Post("/:chatId")
     async createMessage(@Body() message: CreateMessageDto, @Param('chatId') chatId: number,@GetCurrentUserById() user: any ){
-        console.log(user);
-        return await this.messageService.createMessage(message,2,chatId);
+        return await this.messageService.createMessage(message,user.id,chatId);
 
     }
     @UseGuards(JwtGuard)

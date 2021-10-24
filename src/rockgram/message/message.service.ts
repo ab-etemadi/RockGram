@@ -35,6 +35,7 @@ export class MessageService {
 
   async createMessage(message: CreateMessageDto, userId: number, chatId: number) {
     
+    console.log(userId);
     const existingChat = await this.userChatRepos.findOne({where: {chatId:chatId, userId:userId}});
     if (!existingChat) {
         throw new NotFoundException(`chat not found!`)
@@ -42,6 +43,8 @@ export class MessageService {
     const chat = await this.chatRepository.findOne({where:{id : chatId}});
     chat.date = new Date();
     await this.chatRepository.save(chat);
+    
+
     return await this.customRepository.createMesssage(message, userId, chatId)
   }
 
